@@ -1,0 +1,32 @@
+<nav
+  class="fixed top-0 left-0 w-full z-50 bg-white border-b border-gray-200 shadow-sm"
+>
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a routerLink="/" class="text-xl font-bold text-blue-600">ContentLoop</a>
+
+    <ul
+      class="hidden md:flex gap-6 items-center text-sm font-medium text-gray-600"
+    >
+      <li><a routerLink="/" routerLinkActive="text-blue-600">Home</a></li>
+      <li>
+        <a routerLink="/explore" routerLinkActive="text-blue-600">Explore</a>
+      </li>
+      <li>
+        <a routerLink="/article/create" routerLinkActive="text-blue-600"
+          >Write</a
+        >
+      </li>
+    </ul>
+
+    <div class="flex items-center gap-4">
+      <a routerLink="/login" class="text-sm text-gray-600 hover:text-blue-600"
+        >Login</a
+      >
+      <a
+        routerLink="/register"
+        class="text-sm text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-md"
+        >Sign up</a
+      >
+    </div>
+  </div>
+</nav>
