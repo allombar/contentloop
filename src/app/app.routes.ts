@@ -27,7 +27,7 @@ export const routes: Routes = [
     path: 'profile/:id',
     component: ProfileComponent,
   },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, title: 'Page de connexion' },
   {
     path: 'register',
     component: RegisterComponent,

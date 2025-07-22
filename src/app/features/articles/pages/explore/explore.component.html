@@ -1,4 +1,76 @@
-<section class="p-8">
-  <h2 class="text-2xl font-semibold mb-4">Explore Articles</h2>
-  <p class="text-gray-500">Browse recent content here.</p>
-</section>
+<div class="max-w-screen-lg mx-auto px-4 sm:px-8 xl:px-0 py-8">
+  <h1 class="text-3xl font-bold mb-6 text-base-content">
+    Explorer les articles
+  </h1>
+
+  <!-- Recherche et filtre -->
+  <div
+    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
+  >
+    <input
+      type="text"
+      [(ngModel)]="search"
+      placeholder="Rechercher un article..."
+      class="input input-bordered w-full sm:max-w-xs"
+    />
+
+    <select
+      [(ngModel)]="selectedCategory"
+      class="select select-bordered w-full sm:w-auto"
+    >
+      <option value="">Toutes les catégories</option>
+      @for (category of categories; track $index) {
+      <option [value]="category">
+        {{ category }}
+      </option>
+      }
+    </select>
+  </div>
+
+  <!-- Liste d’articles -->
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    @for (article of paginatedArticles; track $index) {
+    <div class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
+      <div class="card-body">
+        <h2 class="card-title text-base-content">{{ article.title }}</h2>
+        <p class="text-base-content/70 line-clamp-3">{{ article.summary }}</p>
+        <div class="mt-4 text-sm text-primary">{{ article.category }}</div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Pagination -->
+  @if (totalPages > 1) {
+  <div class="flex justify-center mt-10">
+    <div class="join">
+      <button
+        class="join-item btn btn-sm"
+        [disabled]="currentPage === 1"
+        (click)="goToPage(currentPage - 1)"
+      >
+        Précédent
+      </button>
+      @for (page of [].constructor(totalPages); track $index) {
+      <ng-container>
+        <button
+          class="join-item btn btn-sm"
+          [class.btn-active]="currentPage === $index + 1"
+          (click)="goToPage($index + 1)"
+        >
+          {{ $index + 1 }}
+        </button>
+      </ng-container>
+      }
+
+      <button
+        class="join-item btn btn-sm"
+        [disabled]="currentPage === totalPages"
+        (click)="goToPage(currentPage + 1)"
+      >
+        Suivant
+      </button>
+    </div>
+  </div>
+  }
+</div>

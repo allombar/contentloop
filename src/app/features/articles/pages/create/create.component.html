@@ -1,12 +1,79 @@
-<section class="p-8 max-w-3xl mx-auto">
-  <h2 class="text-2xl font-semibold">Create Article</h2>
-  <form class="mt-4 space-y-4">
-    <input type="text" placeholder="Title" class="w-full border p-2 rounded" />
-    <textarea
-      rows="6"
-      placeholder="Content..."
-      class="w-full border p-2 rounded"
-    ></textarea>
-    <button class="px-4 py-2 bg-blue-600 text-white rounded">Publish</button>
+<div class="max-w-screen-md mx-auto px-4 sm:px-8 xl:px-0 py-10">
+  <h1 class="text-3xl font-bold text-base-content mb-6 text-center">
+    Créer un article
+  </h1>
+
+  <form class="space-y-6" (ngSubmit)="onSubmit()">
+    <!-- Titre -->
+    <div>
+      <label for="title" class="label">
+        <span class="label-text">Titre</span>
+      </label>
+      <input
+        type="text"
+        id="title"
+        [(ngModel)]="article.title"
+        name="title"
+        placeholder="Ex : 💡 Comment j'ai appris Angular en 30 jours"
+        class="input input-bordered w-full"
+        required
+      />
+    </div>
+
+    <!-- Image de couverture -->
+    <div>
+      <label class="label">
+        <span class="label-text">Image de couverture</span>
+      </label>
+      <input
+        type="file"
+        (change)="onImageSelected($event)"
+        accept="image/*"
+        class="file-input file-input-bordered w-full"
+      />
+      @if (article.cover) {
+      <img
+        [src]="article.cover"
+        class="mt-4 rounded-lg max-h-64 object-cover w-full"
+      />
+      }
+    </div>
+
+    <!-- Catégorie -->
+    <div>
+      <label for="category" class="label">
+        <span class="label-text">Catégorie</span>
+      </label>
+      <select
+        [(ngModel)]="article.category"
+        name="category"
+        id="category"
+        class="select select-bordered w-full"
+        required
+      >
+        <option disabled value="">Choisir une catégorie</option>
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+
+    <!-- Contenu avec émojis -->
+    <div>
+      <label class="label">
+        <span class="label-text">Contenu</span>
+      </label>
+      <textarea
+        [(ngModel)]="article.content"
+        name="content"
+        placeholder="✍️ Écris ton article ici... Tu peux utiliser des émojis, du texte enrichi, etc."
+        rows="10"
+        class="textarea textarea-bordered w-full"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Soumettre -->
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">Publier l'article</button>
+    </div>
   </form>
-</section>
+</div>

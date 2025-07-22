@@ -1,17 +1,104 @@
-<section class="p-8 max-w-sm mx-auto">
-  <h2 class="text-2xl font-semibold mb-4">Register</h2>
-  <form class="space-y-4">
-    <input
-      type="text"
-      placeholder="Username"
-      class="w-full border p-2 rounded"
-    />
-    <input type="email" placeholder="Email" class="w-full border p-2 rounded" />
-    <input
-      type="password"
-      placeholder="Password"
-      class="w-full border p-2 rounded"
-    />
-    <button class="w-full py-2 bg-green-600 text-white rounded">Sign Up</button>
-  </form>
-</section>
+<div class="max-w-[520px] mx-auto px-4 sm:px-8 xl:px-0">
+  <a
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors h-10 px-4 py-2 mb-6 text-base-content hover:text-primary"
+    href="/"
+  >
+    <i-lucide [img]="ArrowLeft" class="h-4 w-4" />
+    Retour à l'accueil
+  </a>
+
+  <div class="rounded-xl bg-base-100 shadow-xl p-4 sm:p-7 xl:p-12">
+    <div class="text-center mb-9">
+      <h1 class="font-bold text-4xl mb-4 text-base-content">Créer un compte</h1>
+      <p class="text-base-content/70">Rejoins-nous dès maintenant</p>
+    </div>
+
+    <form class="space-y-6">
+      <div>
+        <label
+          for="firstname"
+          class="block text-sm font-medium mb-2 text-base-content"
+        >
+          Prénom
+        </label>
+        <input
+          type="text"
+          id="firstname"
+          placeholder="Jean"
+          class="input input-bordered w-full"
+        />
+      </div>
+
+      <div>
+        <label
+          for="lastname"
+          class="block text-sm font-medium mb-2 text-base-content"
+        >
+          Nom
+        </label>
+        <input
+          type="text"
+          id="lastname"
+          placeholder="Dupont"
+          class="input input-bordered w-full"
+        />
+      </div>
+
+      <div>
+        <label
+          for="email"
+          class="block text-sm font-medium mb-2 text-base-content"
+        >
+          Adresse e-mail
+        </label>
+        <input
+          type="email"
+          id="email"
+          placeholder="exemple@email.com"
+          class="input input-bordered w-full"
+        />
+      </div>
+
+      <div>
+        <label
+          for="password"
+          class="block text-sm font-medium mb-2 text-base-content"
+        >
+          Mot de passe
+        </label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Choisis un mot de passe"
+          class="input input-bordered w-full"
+        />
+      </div>
+
+      <div>
+        <label
+          for="confirmPassword"
+          class="block text-sm font-medium mb-2 text-base-content"
+        >
+          Confirmer le mot de passe
+        </label>
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Répète ton mot de passe"
+          class="input input-bordered w-full"
+        />
+      </div>
+
+      <button type="submit" class="w-full btn btn-primary">
+        Créer mon compte
+      </button>
+
+      <p class="text-center text-base-content/70 mt-4">
+        Tu as déjà un compte ?
+        <a href="signin.html" class="font-medium text-primary hover:underline">
+          Connecte-toi
+        </a>
+      </p>
+    </form>
+  </div>
+</div>

@@ -3425,6 +3425,11 @@ custom-event@~1.0.0:
   resolved "https://registry.yarnpkg.com/custom-event/-/custom-event-1.0.1.tgz#5d02a46850adf1b4a317946a3928fccb5bfd0425"
   integrity sha512-GAj5FOq0Hd+RsCGVJxZuKaIDXDf3h6GQoNEjFgbLLI/trgtavwUbSnZ5pVfg27DVCaWjIohryS0JFwIJyT2cMg==
 
+daisyui@^5.0.46:
+  version "5.0.46"
+  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-5.0.46.tgz#e8a0645bd893db9dac5d0e48842ad9cbf5392f12"
+  integrity sha512-vMDZK1tI/bOb2Mc3Mk5WpquBG3ZqBz1YKZ0xDlvpOvey60dOS4/5Qhdowq1HndbQl7PgDLDYysxAjjUjwR7/eQ==
+
 date-format@^4.0.14:
   version "4.0.14"
   resolved "https://registry.yarnpkg.com/date-format/-/date-format-4.0.14.tgz#7a8e584434fb169a521c8b7aa481f355810d9400"
@@ -5010,6 +5015,13 @@ lru-cache@^5.1.1:
   integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
   dependencies:
     yallist "^3.0.2"
+
+lucide-angular@^0.525.0:
+  version "0.525.0"
+  resolved "https://registry.yarnpkg.com/lucide-angular/-/lucide-angular-0.525.0.tgz#10185bd3a8fc9fcb77fcc1f6f6f7541643f74316"
+  integrity sha512-Db6a3e6Z45Qlslh2I5YvmaIPZ3kSJojDos0lO3KzRW18YNguU28w3OZSPPglRRhBiS+HKuhQZjaJyqB/bqxfZg==
+  dependencies:
+    tslib "^2.3.0"
 
 magic-string@0.30.17, magic-string@^0.30.17:
   version "0.30.17"
