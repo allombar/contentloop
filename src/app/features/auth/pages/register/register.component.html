@@ -1,49 +1,58 @@
-<div class="max-w-[520px] mx-auto px-4 sm:px-8 xl:px-0">
+<div class="max-w-[520px] mx-auto px-4 sm:px-8 xl:px-0 py-8">
+  <!-- Bouton retour -->
   <a
+    routerLink="/"
     class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors h-10 px-4 py-2 mb-6 text-base-content hover:text-primary"
-    href="/"
   >
     <i-lucide [img]="ArrowLeft" class="h-4 w-4" />
     Retour à l'accueil
   </a>
 
+  <!-- Card principale -->
   <div class="rounded-xl bg-base-100 shadow-xl p-4 sm:p-7 xl:p-12">
+    <!-- Header -->
     <div class="text-center mb-9">
       <h1 class="font-bold text-4xl mb-4 text-base-content">Créer un compte</h1>
       <p class="text-base-content/70">Rejoins-nous dès maintenant</p>
     </div>
 
-    <form class="space-y-6">
+    <!-- Formulaire -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <!-- Prénom -->
       <div>
         <label
-          for="firstname"
+          for="firstName"
           class="block text-sm font-medium mb-2 text-base-content"
         >
           Prénom
         </label>
         <input
           type="text"
-          id="firstname"
+          id="firstName"
+          formControlName="firstName"
           placeholder="Jean"
           class="input input-bordered w-full"
         />
       </div>
 
+      <!-- Nom -->
       <div>
         <label
-          for="lastname"
+          for="lastName"
           class="block text-sm font-medium mb-2 text-base-content"
         >
           Nom
         </label>
         <input
           type="text"
-          id="lastname"
+          id="lastName"
+          formControlName="lastName"
           placeholder="Dupont"
           class="input input-bordered w-full"
         />
       </div>
 
+      <!-- Email -->
       <div>
         <label
           for="email"
@@ -54,11 +63,13 @@
         <input
           type="email"
           id="email"
+          formControlName="email"
           placeholder="exemple@email.com"
           class="input input-bordered w-full"
         />
       </div>
 
+      <!-- Mot de passe avec validation visuelle -->
       <div>
         <label
           for="password"
@@ -69,9 +80,114 @@
         <input
           type="password"
           id="password"
+          formControlName="password"
           placeholder="Choisis un mot de passe"
           class="input input-bordered w-full"
         />
+
+        <!-- Indicateurs visuels de force -->
+        @if (passwordValue()) {
+        <div class="mt-3 space-y-3">
+          <!-- Progress bar -->
+          <progress
+            class="progress w-full"
+            [class.progress-error]="passwordStrength() <= 2"
+            [class.progress-warning]="passwordStrength() === 3"
+            [class.progress-info]="passwordStrength() === 4"
+            [class.progress-success]="passwordStrength() === 5"
+            [value]="passwordStrength()"
+            max="5"
+          ></progress>
+
+          <!-- Critères avec icônes plus claires -->
+          <div class="flex justify-between text-xs">
+            <div
+              class="flex flex-col items-center gap-1"
+              [class.text-success]="hasMinLength()"
+              [class.text-base-content]="!hasMinLength()"
+            >
+              <div
+                class="w-6 h-6 rounded-full border-2 flex items-center justify-center font-bold"
+                [class.border-success]="hasMinLength()"
+                [class.bg-success]="hasMinLength()"
+                [class.text-success-content]="hasMinLength()"
+                [class.border-base-content]="!hasMinLength()"
+              >
+                ✓
+              </div>
+              <span>8+ char</span>
+            </div>
+
+            <div
+              class="flex flex-col items-center gap-1"
+              [class.text-success]="hasLowercase()"
+              [class.text-base-content]="!hasLowercase()"
+            >
+              <div
+                class="w-6 h-6 rounded-full border-2 flex items-center justify-center font-bold"
+                [class.border-success]="hasLowercase()"
+                [class.bg-success]="hasLowercase()"
+                [class.text-success-content]="hasLowercase()"
+                [class.border-base-content]="!hasLowercase()"
+              >
+                ✓
+              </div>
+              <span>minus</span>
+            </div>
+
+            <div
+              class="flex flex-col items-center gap-1"
+              [class.text-success]="hasUppercase()"
+              [class.text-base-content]="!hasUppercase()"
+            >
+              <div
+                class="w-6 h-6 rounded-full border-2 flex items-center justify-center font-bold"
+                [class.border-success]="hasUppercase()"
+                [class.bg-success]="hasUppercase()"
+                [class.text-success-content]="hasUppercase()"
+                [class.border-base-content]="!hasUppercase()"
+              >
+                ✓
+              </div>
+              <span>MAJUS</span>
+            </div>
+
+            <div
+              class="flex flex-col items-center gap-1"
+              [class.text-success]="hasNumber()"
+              [class.text-base-content]="!hasNumber()"
+            >
+              <div
+                class="w-6 h-6 rounded-full border-2 flex items-center justify-center font-bold"
+                [class.border-success]="hasNumber()"
+                [class.bg-success]="hasNumber()"
+                [class.text-success-content]="hasNumber()"
+                [class.border-base-content]="!hasNumber()"
+              >
+                ✓
+              </div>
+              <span>123</span>
+            </div>
+
+            <div
+              class="flex flex-col items-center gap-1"
+              [class.text-success]="hasSpecialChar()"
+              [class.text-base-content]="!hasSpecialChar()"
+            >
+              <div
+                class="w-6 h-6 rounded-full border-2 flex items-center justify-center font-bold"
+                [class.border-success]="hasSpecialChar()"
+                [class.bg-success]="hasSpecialChar()"
+                [class.text-success-content]="hasSpecialChar()"
+                [class.border-base-content]="!hasSpecialChar()"
+              >
+                ✓
+              </div>
+              <span>{{ "@#$" }}</span>
+            </div>
+          </div>
+        </div>
+        }
       </div>
 
       <div>
@@ -84,18 +200,26 @@
         <input
           type="password"
           id="confirmPassword"
+          formControlName="confirmPassword"
           placeholder="Répète ton mot de passe"
           class="input input-bordered w-full"
         />
       </div>
 
-      <button type="submit" class="w-full btn btn-primary">
-        Créer mon compte
+      <button
+        type="submit"
+        class="w-full btn btn-primary"
+        [disabled]="isRegistering"
+      >
+        @if (isRegistering) { Création en cours... } @else { Créer mon compte }
       </button>
 
       <p class="text-center text-base-content/70 mt-4">
         Tu as déjà un compte ?
-        <a href="signin.html" class="font-medium text-primary hover:underline">
+        <a
+          routerLink="/auth/login"
+          class="font-medium text-primary hover:underline"
+        >
           Connecte-toi
         </a>
       </p>

@@ -2,12 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   LoginRequest,
   RegisterRequest,
   UserData,
   UserDto,
 } from '../models/user.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,14 +17,13 @@ import {
 export class AuthService {
   private _http = inject(HttpClient);
   private _router = inject(Router);
-  private readonly API_URL = 'https://localhost:7167';
   private readonly TOKEN_KEY = 'auth_token';
 
   user = signal<UserDto | null>(null);
 
   login(user: LoginRequest): Observable<UserData> {
     return this._http
-      .post<UserData>(`${this.API_URL}/api/auth/login`, user)
+      .post<UserData>(`${environment.apiUrl}/auth/login`, user)
       .pipe(
         tap((userData) => this.setToken(userData.token)),
         map((userData: UserData) => {
@@ -30,20 +31,24 @@ export class AuthService {
 
           return userData;
         }),
-        tap(({ user }: UserData) => this.user.set(user))
+        tap(({ user }: UserData) => {
+          this.user.set(user);
+        })
       );
   }
 
   register(user: RegisterRequest): Observable<UserData> {
     return this._http
-      .post<UserData>(`${this.API_URL}/api/auth/register`, user)
+      .post<UserData>(`${environment.apiUrl}/auth/register`, user)
       .pipe(
         tap((userData) => this.setToken(userData.token!)),
         map((userData: UserData) => {
           delete userData.token;
           return userData;
         }),
-        tap(({ user }: UserData) => this.user.set(user))
+        tap(({ user }: UserData) => {
+          this.user.set(user);
+        })
       );
   }
 
@@ -55,9 +60,11 @@ export class AuthService {
   }
 
   fetchCurrentUser(): Observable<UserDto> {
-    return this._http
-      .get<UserDto>(`${this.API_URL}/api/auth/me`)
-      .pipe(tap((user: UserDto) => this.user.set(user)));
+    return this._http.get<UserDto>(`${environment.apiUrl}/auth/me`).pipe(
+      tap((user: UserDto) => {
+        this.user.set(user);
+      })
+    );
   }
 
   setToken(token: string | undefined): void {
@@ -77,13 +84,5 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!this.user();
-  }
-
-  get currentUser(): UserDto | null {
-    return this.user();
-  }
-
-  setUser(user: UserDto | null) {
-    this.user.set(user);
   }
 }

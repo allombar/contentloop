@@ -1,0 +1,7 @@
+<div
+  class="fixed z-[100] flex flex-col gap-3 p-4 w-full items-center sm:items-end bottom-0 sm:bottom-4 right-0"
+>
+  @for (toast of toasts(); track toast.id) {
+  <app-toast [toast]="toast" (dismissed)="onDismiss($event)" />
+  }
+</div>

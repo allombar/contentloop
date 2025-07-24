@@ -6,13 +6,12 @@ export function authGuard(mode: 'auth' | 'guest'): CanActivateFn {
     const auth = inject(AuthService);
     const router = inject(Router);
 
-    if (mode === 'auth' && auth.isAuthenticated()) return true;
-    if (mode === 'auth' && !auth.isAuthenticated())
+    if (mode === 'auth' && auth.getToken()) return true;
+    if (mode === 'auth' && !auth.getToken())
       return router.createUrlTree(['/login']);
 
-    if (mode === 'guest' && !auth.isAuthenticated()) return true;
-    if (mode === 'guest' && auth.isAuthenticated())
-      return router.createUrlTree(['/']);
+    if (mode === 'guest' && !auth.getToken()) return true;
+    if (mode === 'guest' && auth.getToken()) return router.createUrlTree(['/']);
 
     return false;
   };

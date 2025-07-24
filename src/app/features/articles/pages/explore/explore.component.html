@@ -1,76 +1,67 @@
-<div class="max-w-screen-lg mx-auto px-4 sm:px-8 xl:px-0 py-8">
-  <h1 class="text-3xl font-bold mb-6 text-base-content">
-    Explorer les articles
-  </h1>
+<div class="bg-gray-50 min-h-screen py-8">
+  <div class="container mx-auto">
+    <h2 class="text-4xl font-semibold text-center text-gray-900 mb-8">
+      Explore Articles
+    </h2>
 
-  <!-- Recherche et filtre -->
-  <div
-    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
-  >
-    <input
-      type="text"
-      [(ngModel)]="search"
-      placeholder="Rechercher un article..."
-      class="input input-bordered w-full sm:max-w-xs"
-    />
+    @if (articlesSignal() && articlesSignal()!.items.length > 0) {
+    <div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        @for (article of articlesSignal()!.items; track article.id) {
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-800">
+              {{ article.title }}
+            </h3>
+            <p class="text-gray-600 mt-3">
+              {{ article.content | slice : 0 : 150 }}...
+            </p>
+            <a
+              [routerLink]="['/article', article.id]"
+              class="text-blue-500 hover:text-blue-700 mt-4 block"
+              >Lire l'article</a
+            >
+            <p class="text-gray-500 text-sm mt-2">
+              Auteur: {{ article.authorName }}
+            </p>
+            <p class="text-gray-400 text-sm">Vues: {{ article.viewsCount }}</p>
+            <p class="text-gray-400 text-sm">
+              Posté le: {{ article.createdAt | date : "dd/MM/YYYY" }}
+            </p>
+          </div>
+        </div>
+        }
+      </div>
 
-    <select
-      [(ngModel)]="selectedCategory"
-      class="select select-bordered w-full sm:w-auto"
-    >
-      <option value="">Toutes les catégories</option>
-      @for (category of categories; track $index) {
-      <option [value]="category">
-        {{ category }}
-      </option>
-      }
-    </select>
-  </div>
+      <!-- Pagination -->
 
-  <!-- Liste d’articles -->
-  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    @for (article of paginatedArticles; track $index) {
-    <div class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
-      <div class="card-body">
-        <h2 class="card-title text-base-content">{{ article.title }}</h2>
-        <p class="text-base-content/70 line-clamp-3">{{ article.summary }}</p>
-        <div class="mt-4 text-sm text-primary">{{ article.category }}</div>
+      <div class="mt-8 text-center">
+        <button
+          (click)="loadPage(articlesSignal()!.page - 1)"
+          [disabled]="articlesSignal()!.page <= 1"
+          class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-gray-400"
+        >
+          Précédent
+        </button>
+
+        <span class="mx-4 text-lg"
+          >Page {{ articlesSignal()!.page }} sur
+          {{ articlesSignal()!.totalPages }}</span
+        >
+
+        <button
+          (click)="loadPage(articlesSignal()!.page + 1)"
+          [disabled]="articlesSignal()!.page >= articlesSignal()!.totalPages"
+          class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-gray-400"
+        >
+          Suivant
+        </button>
       </div>
     </div>
+    } @else {
+    <p class="text-center text-gray-600">
+      Aucun article disponible pour le moment.
+    </p>
     }
   </div>
-
-  <!-- Pagination -->
-  @if (totalPages > 1) {
-  <div class="flex justify-center mt-10">
-    <div class="join">
-      <button
-        class="join-item btn btn-sm"
-        [disabled]="currentPage === 1"
-        (click)="goToPage(currentPage - 1)"
-      >
-        Précédent
-      </button>
-      @for (page of [].constructor(totalPages); track $index) {
-      <ng-container>
-        <button
-          class="join-item btn btn-sm"
-          [class.btn-active]="currentPage === $index + 1"
-          (click)="goToPage($index + 1)"
-        >
-          {{ $index + 1 }}
-        </button>
-      </ng-container>
-      }
-
-      <button
-        class="join-item btn btn-sm"
-        [disabled]="currentPage === totalPages"
-        (click)="goToPage(currentPage + 1)"
-      >
-        Suivant
-      </button>
-    </div>
-  </div>
-  }
 </div>

@@ -1,32 +1,56 @@
 <nav
-  class="fixed top-0 left-0 w-full z-50 bg-white border-b border-gray-200 shadow-sm"
+  class="navbar bg-base-100 border-b border-base-200 shadow-sm fixed top-0 left-0 w-full z-50"
 >
-  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-    <a routerLink="/" class="text-xl font-bold text-blue-600">ContentLoop</a>
+  <div class="max-w-7xl mx-auto w-full px-4 flex justify-between items-center">
+    <!-- Logo -->
+    <a routerLink="/" class="text-xl font-bold text-primary">ContentLoop</a>
 
+    <!-- Menu desktop -->
     <ul
-      class="hidden md:flex gap-6 items-center text-sm font-medium text-gray-600"
+      class="hidden md:flex gap-6 items-center text-sm font-medium text-base-content"
     >
-      <li><a routerLink="/" routerLinkActive="text-blue-600">Home</a></li>
       <li>
-        <a routerLink="/explore" routerLinkActive="text-blue-600">Explore</a>
-      </li>
-      <li>
-        <a routerLink="/article/create" routerLinkActive="text-blue-600"
-          >Write</a
+        <a
+          routerLink="/"
+          routerLinkActive="text-primary"
+          class="transition-colors"
+          >Accueil</a
         >
       </li>
+      <li>
+        <a
+          routerLink="/explore"
+          routerLinkActive="text-primary"
+          class="transition-colors"
+          >Explorer</a
+        >
+      </li>
+      @if (isAuthenticated()) {
+      <li>
+        <a
+          routerLink="/article/create"
+          routerLinkActive="text-primary"
+          class="transition-colors"
+          >Écrire</a
+        >
+      </li>
+      }
     </ul>
 
-    <div class="flex items-center gap-4">
-      <a routerLink="/login" class="text-sm text-gray-600 hover:text-blue-600"
-        >Login</a
-      >
+    <!-- Actions -->
+    <div class="flex items-center gap-3">
+      @if (!isAuthenticated()) {
       <a
-        routerLink="/register"
-        class="text-sm text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-md"
-        >Sign up</a
+        routerLink="/login"
+        class="text-sm text-base-content hover:text-primary transition-colors"
+        >Connexion</a
       >
+      <a routerLink="/register" class="btn btn-sm btn-primary">Inscription</a>
+      } @else {
+      <button (click)="onLogout()" class="btn btn-sm btn-primary">
+        Se déconnnecter
+      </button>
+      }
     </div>
   </div>
 </nav>

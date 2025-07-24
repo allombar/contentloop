@@ -1,30 +1,27 @@
 import {
   ApplicationConfig,
   inject,
+  provideAppInitializer,
   provideEnvironmentInitializer,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import {
-  provideHttpClient,
-  withFetch,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthService } from './features/auth/services/auth.service';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
 
-    provideEnvironmentInitializer(() => {
+    provideAppInitializer(() => {
       const $auth = inject(AuthService);
-
-      $auth.fetchCurrentUser().subscribe();
+      if ($auth.getToken()) $auth.fetchCurrentUser().subscribe();
     }),
   ],
 };

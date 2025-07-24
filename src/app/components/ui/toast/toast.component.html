@@ -1,0 +1,22 @@
+<div
+  class="relative transition-all duration-300 ease-in-out transform w-[calc(100vw-2rem)] max-w-[420px] sm:w-[420px] text-white p-4 rounded-lg shadow-lg"
+  [ngClass]="getToastClass(toast.type)"
+  [class.opacity-0]="!show"
+  [class.translate-x-8]="!show"
+  [class.opacity-100]="show"
+  [class.translate-x-0]="show"
+>
+  <div class="text-sm font-semibold">{{ toast.title }}</div>
+
+  @for (msg of toast.description; track $index) {
+  <div class="text-sm mt-1">{{ msg }}</div>
+  }
+
+  <button
+    class="absolute top-2 right-2 text-white/70 hover:text-white text-lg leading-none"
+    (click)="close()"
+    aria-label="Fermer"
+  >
+    ×
+  </button>
+</div>

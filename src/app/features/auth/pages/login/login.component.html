@@ -13,7 +13,7 @@
       <p class="text-base-content/70">Connecte-toi à ton compte</p>
     </div>
 
-    <form class="space-y-6">
+    <form [formGroup]="loginForm" (submit)="onSubmit()" class="space-y-6">
       <div>
         <label
           for="email"
@@ -24,6 +24,7 @@
         <input
           type="email"
           id="email"
+          formControlName="email"
           placeholder="exemple@email.com"
           class="input input-bordered w-full"
         />
@@ -39,6 +40,7 @@
         <input
           type="password"
           id="password"
+          formControlName="password"
           placeholder="Ton mot de passe"
           class="input input-bordered w-full"
         />
@@ -54,7 +56,13 @@
         </a>
       </div>
 
-      <button type="submit" class="w-full btn btn-primary">Se connecter</button>
+      <button
+        type="submit"
+        [disabled]="isConnecting"
+        class="w-full btn btn-primary"
+      >
+        Se connecter
+      </button>
 
       <p class="text-center text-base-content/70 mt-4">
         Pas encore de compte ?

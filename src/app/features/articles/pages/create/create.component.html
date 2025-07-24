@@ -52,7 +52,9 @@
         required
       >
         <option disabled value="">Choisir une catégorie</option>
-        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        @for (cat of categories; track $index) {
+        <option [value]="cat">{{ cat }}</option>
+        }
       </select>
     </div>
 

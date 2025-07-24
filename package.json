@@ -4,8 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build -configuration production",
     "watch": "ng build --watch --configuration development",
+    "docs:dev": "compodoc -p tsconfig.json -s --watch",
+    "docs:build": "compodoc -p tsconfig.json -d dist/docs --theme material",
     "test": "ng test"
   },
   "private": true,
