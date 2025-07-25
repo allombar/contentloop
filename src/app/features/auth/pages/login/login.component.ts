@@ -7,6 +7,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginRequest } from '../../models/user.model';
 import { ToastService } from '../../../../components/ui/services/toast.service';
 import { ToastType } from '../../../../components/ui/models/toast.model';
+
 @Component({
   selector: 'app-login',
   imports: [LucideAngularModule, RouterLink, ReactiveFormsModule],

@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
 import {
   LoginRequest,
   RegisterRequest,
@@ -44,6 +43,7 @@ export class AuthService {
         tap((userData) => this.setToken(userData.token!)),
         map((userData: UserData) => {
           delete userData.token;
+
           return userData;
         }),
         tap(({ user }: UserData) => {

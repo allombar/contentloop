@@ -3,7 +3,6 @@
     <h2 class="text-4xl font-semibold text-center text-gray-900 mb-8">
       Explore Articles
     </h2>
-
     @if (articlesSignal() && articlesSignal()!.items.length > 0) {
     <div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -17,23 +16,22 @@
               {{ article.content | slice : 0 : 150 }}...
             </p>
             <a
-              [routerLink]="['/article', article.id]"
+              [routerLink]="'/article/' + article.id"
               class="text-blue-500 hover:text-blue-700 mt-4 block"
-              >Lire l'article</a
             >
+              Lire l'article
+            </a>
             <p class="text-gray-500 text-sm mt-2">
               Auteur: {{ article.authorName }}
             </p>
             <p class="text-gray-400 text-sm">Vues: {{ article.viewsCount }}</p>
             <p class="text-gray-400 text-sm">
-              Posté le: {{ article.createdAt | date : "dd/MM/YYYY" }}
+              Posté le: {{ article.createdAt | date : "dd/MM/yyyy" }}
             </p>
           </div>
         </div>
         }
       </div>
-
-      <!-- Pagination -->
 
       <div class="mt-8 text-center">
         <button
@@ -44,10 +42,10 @@
           Précédent
         </button>
 
-        <span class="mx-4 text-lg"
-          >Page {{ articlesSignal()!.page }} sur
-          {{ articlesSignal()!.totalPages }}</span
-        >
+        <span class="mx-4 text-lg">
+          Page {{ articlesSignal()!.page }} sur
+          {{ articlesSignal()!.totalPages }}
+        </span>
 
         <button
           (click)="loadPage(articlesSignal()!.page + 1)"

@@ -91,9 +91,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.registerForm
       .get('password')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.passwordValue.set(value || '');
-      });
+      .subscribe((value) => this.passwordValue.set(value || ''));
   }
 
   onSubmit(): void {
@@ -114,6 +112,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
+          this.router.navigate(['/']);
           this.toastService.show({
             title: 'Compte créé avec succès',
             type: ToastType.Success,
