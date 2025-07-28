@@ -1,1 +1,206 @@
-<p>edit works!</p>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-base-content mb-2">
+      Modifier l'Article
+    </h1>
+    <p class="text-base-content/70">
+      Modifiez votre article et sauvegardez les changements
+    </p>
+  </div>
+
+  @if (isLoading()) {
+  <div class="flex justify-center items-center min-h-[400px]">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+  </div>
+  } @if (!isLoading() && articleForm) {
+  <form [formGroup]="articleForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body space-y-6">
+        <div class="form-control flex flex-col">
+          <label class="label">
+            <span class="label-text text-lg font-semibold"
+              >Titre de l'article</span
+            >
+            <span
+              class="label-text-alt text-error"
+              [class.hidden]="
+                !articleForm.get('title')?.invalid ||
+                !articleForm.get('title')?.touched
+              "
+            >
+              Requis
+            </span>
+          </label>
+          <input
+            type="text"
+            formControlName="title"
+            placeholder="Entrez le titre de votre article..."
+            class="input input-bordered input-lg w-full"
+            [class.input-error]="
+              articleForm.get('title')?.invalid &&
+              articleForm.get('title')?.touched
+            "
+          />
+        </div>
+
+        <div class="form-control flex flex-col">
+          <label class="label">
+            <span class="label-text text-lg font-semibold">Description</span>
+            <span
+              class="label-text-alt text-error"
+              [class.hidden]="
+                !articleForm.get('description')?.invalid ||
+                !articleForm.get('description')?.touched
+              "
+            >
+              Requis
+            </span>
+          </label>
+          <textarea
+            formControlName="description"
+            placeholder="Description courte de votre article..."
+            class="textarea textarea-bordered h-24 w-full"
+            [class.textarea-error]="
+              articleForm.get('description')?.invalid &&
+              articleForm.get('description')?.touched
+            "
+          >
+          </textarea>
+        </div>
+
+        <div class="form-control flex flex-col">
+          <label class="label">
+            <span class="label-text text-lg font-semibold">Contenu</span>
+          </label>
+
+          <quill-editor
+            formControlName="content"
+            name="content"
+            [modules]="modules"
+            [class.textarea-error]="
+              articleForm.get('content')?.invalid &&
+              articleForm.get('content')?.touched
+            "
+            placeholder="Rédigez votre article ici..."
+            theme="snow"
+            format="html"
+          >
+          </quill-editor>
+          @if (articleForm.get('content')?.errors?.['maxlength']) {
+          <label class="label">
+            <span class="label-text-alt text-error"
+              >Le contenu dépasse la limite de 20000 caractères</span
+            >
+          </label>
+          }
+        </div>
+      </div>
+    </div>
+
+    @if (hasChanges()) {
+    <div class="alert alert-info">
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
+      </svg>
+      <span>Vous avez des modifications non sauvegardées</span>
+    </div>
+    }
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-between">
+      <div class="flex gap-2">
+        <button
+          type="button"
+          (click)="goBack()"
+          class="btn btn-outline btn-neutral"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            ></path>
+          </svg>
+          Retour
+        </button>
+
+        <button
+          type="button"
+          (click)="resetForm()"
+          [disabled]="!hasChanges()"
+          class="btn btn-outline btn-warning"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            ></path>
+          </svg>
+          Annuler les modifications
+        </button>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="!articleForm.valid || !hasChanges() || isSaving()"
+        class="btn btn-primary"
+      >
+        @if (isSaving()) {
+        <span class="loading loading-spinner loading-sm"></span>
+        Sauvegarde... } @else {
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 13l4 4L19 7"
+          ></path>
+        </svg>
+        Sauvegarder }
+      </button>
+    </div>
+  </form>
+  }
+
+  <!-- Error state -->
+  @if (hasError()) {
+  <div class="alert alert-error">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      ></path>
+    </svg>
+    <span>Impossible de charger l'article. Veuillez réessayer.</span>
+  </div>
+  }
+</div>

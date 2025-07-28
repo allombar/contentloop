@@ -1,9 +1,9 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { ArticlesService } from '../../services/articles.service';
+import { ArticleDto, PagedResultDto } from '../models/articles.model';
+import { Subject, takeUntil } from 'rxjs';
 import { DatePipe, NgClass } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
 import {
   LucideAngularModule,
   ChevronLeftIcon,
@@ -11,19 +11,21 @@ import {
   ChevronRightIcon,
   ChevronsRightIcon,
 } from 'lucide-angular';
-import { ArticleDto, PagedResultDto } from '../models/articles.model';
+import { ToastService } from '../../../../components/ui/services/toast.service';
+import { ToastType } from '../../../../components/ui/models/toast.model';
 
 @Component({
-  selector: 'app-explore',
-  imports: [FormsModule, RouterLink, DatePipe, NgClass, LucideAngularModule],
-  templateUrl: './explore.component.html',
-  styleUrl: './explore.component.css',
+  selector: 'app-my-articles',
+  imports: [DatePipe, LucideAngularModule, NgClass, RouterLink],
+  templateUrl: './my-articles.component.html',
+  styleUrl: './my-articles.component.css',
 })
-export class ExploreComponent implements OnInit, OnDestroy {
-  articlesService = inject(ArticlesService);
+export class MyArticlesComponent implements OnInit, OnDestroy {
+  private articlesService = inject(ArticlesService);
   articlesSignal = signal<PagedResultDto<ArticleDto> | null>(null);
   private destroy$ = new Subject<void>();
   private activatedRoute = inject(ActivatedRoute);
+  private toastService = inject(ToastService);
 
   readonly ChevronLeft = ChevronLeftIcon;
   readonly ChevronsLeft = ChevronsLeftIcon;
@@ -31,7 +33,7 @@ export class ExploreComponent implements OnInit, OnDestroy {
   readonly ChevronsRight = ChevronsRightIcon;
 
   // CONFIG
-  private limit = 9;
+  private limit = 3;
   private maxVisiblePages = 5;
 
   ngOnInit(): void {
@@ -54,12 +56,40 @@ export class ExploreComponent implements OnInit, OnDestroy {
 
   loadPage(page: number): void {
     const offset = page;
-
     this.articlesService
-      .getAllArticles(offset, this.limit)
+      .getAllArticlesByAuthor(offset, this.limit)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((response: PagedResultDto<ArticleDto>) => {
-        this.articlesSignal.set(response);
+      .subscribe({
+        next: (response: PagedResultDto<ArticleDto>) => {
+          this.articlesSignal.set(response);
+        },
+      });
+  }
+
+  deleteArticle(id: string, title: string): void {
+    this.articlesService
+      .deleteArticle(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.loadPage(1);
+
+          this.toastService.show({
+            title: 'Article supprimé',
+            type: ToastType.Info,
+            description: [`L'article "${title}" a bien été supprimé`],
+          });
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression:', error);
+          this.toastService.show({
+            title: 'Erreur',
+            type: ToastType.Error,
+            description: [
+              "Impossible de supprimer l'article. Veuillez réessayer.",
+            ],
+          });
+        },
       });
   }
 

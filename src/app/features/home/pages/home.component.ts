@@ -1,32 +1,49 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import {
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../auth/services/auth.service';
+import { ArticlesService } from '../../articles/services/articles.service';
+import {
+  ArticleDto,
+  PagedResultDto,
+} from '../../articles/pages/models/articles.model';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, DatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent {
-  recentArticles = [
-    {
-      id: 1,
-      title: 'Pourquoi Angular Signals change la donne',
-      summary:
-        'Découvre comment Angular adopte une nouvelle approche réactive avec Signals.',
-    },
-    {
-      id: 2,
-      title: 'Sécuriser ton API en 2025',
-      summary:
-        'Entre tokens, rate-limiting et surveillance : les essentiels à connaître.',
-    },
-    {
-      id: 3,
-      title: 'DaisyUI : le duo gagnant avec Tailwind',
-      summary:
-        'Créer des interfaces cohérentes et rapides sans se fatiguer sur le design.',
-    },
-  ];
+export class HomeComponent implements OnInit, OnDestroy {
+  authService = inject(AuthService);
+  articlesService = inject(ArticlesService);
+  articlesSignal = signal<PagedResultDto<ArticleDto> | null>(null);
+  destroy$ = new Subject<void>();
+
+  user = this.authService.user;
+  isAuthenticated = computed(() => this.user());
+
+  ngOnInit(): void {
+    this.articlesService
+      .getAllArticles(1, 3)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.articlesSignal.set(data);
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

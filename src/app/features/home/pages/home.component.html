@@ -1,5 +1,4 @@
 <div class="max-w-screen-xl mx-auto px-4 sm:px-8 xl:px-0 py-12">
-  <!-- Header -->
   <div class="text-center mb-16">
     <h1 class="text-4xl sm:text-5xl font-bold text-base-content mb-4">
       Bienvenue sur ContentLoop
@@ -8,46 +7,100 @@
       Explore, partage et débat sur les sujets qui te passionnent. Une
       plateforme ouverte, construite par la communauté.
     </p>
+    @if (!isAuthenticated()) {
     <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="/signup" class="btn btn-primary">Créer un compte</a>
-      <a href="/signin" class="btn btn-outline">Se connecter</a>
+      <a routerLink="/register" class="btn btn-primary">Créer un compte</a>
+      <a routerLink="/login" class="btn btn-outline">Se connecter</a>
     </div>
+    }
   </div>
 
-  <!-- Catégories mises en avant -->
-  <div class="mb-12">
-    <h2 class="text-2xl font-semibold text-base-content mb-6 text-center">
-      Sujets populaires
-    </h2>
-    <div class="flex flex-wrap justify-center gap-4">
-      <span class="badge badge-outline badge-lg">Développement Web</span>
-      <span class="badge badge-outline badge-lg">JavaScript</span>
-      <span class="badge badge-outline badge-lg">Angular</span>
-      <span class="badge badge-outline badge-lg">Sécurité</span>
-      <span class="badge badge-outline badge-lg">UX/UI</span>
-      <span class="badge badge-outline badge-lg">Backend</span>
-    </div>
-  </div>
-
-  <!-- Articles récents -->
   <div>
     <h2 class="text-2xl font-semibold text-base-content mb-6 text-center">
       Derniers articles
     </h2>
+
+    @if(articlesSignal() && articlesSignal()!.items.length > 0) {
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      @for (article of recentArticles; track $index) {
-      <div class="card bg-base-100 shadow-md hover:shadow-xl transition-shadow">
-        <div class="card-body">
-          <h3 class="card-title text-base-content">{{ article.title }}</h3>
-          <p class="text-base-content/70 line-clamp-3">{{ article.summary }}</p>
-          <a
-            [routerLink]="['/article', article.id]"
-            class="text-primary mt-3 text-sm hover:underline"
-            >Lire l’article</a
+      @for (article of articlesSignal()?.items; track $index) {
+      <div
+        class="group card bg-base-100/80 backdrop-blur-sm shadow-xl hover:shadow-2xl border border-base-300/50 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1"
+      >
+        <div class="card-body space-y-4">
+          <h3
+            class="text-lg font-bold text-base-content group-hover:text-primary transition-all duration-300 line-clamp-2 leading-tight"
           >
+            {{ article.title }}
+          </h3>
+
+          <p class="text-base-content/70 text-sm leading-relaxed line-clamp-3">
+            {{ article.description }}
+          </p>
+
+          <div
+            class="flex items-center justify-between text-xs text-base-content/60"
+          >
+            <div class="flex items-center gap-4">
+              <span class="font-medium">Par {{ article.authorName }}</span>
+              <div class="flex items-center gap-1">
+                <svg
+                  class="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  ></path>
+                </svg>
+                {{ article.createdAt | date : "dd/MM/yyyy" }}
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1">
+                <svg
+                  class="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  ></path>
+                </svg>
+                {{ article.viewsCount }}
+              </div>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <a
+              [routerLink]="['/article', article.id]"
+              class="btn btn-outline btn-primary w-full group-hover:btn-primary transition-all duration-300"
+            >
+              Lire l'article
+            </a>
+          </div>
         </div>
       </div>
       }
     </div>
+    } @else {
+    <p class="text-center text-gray-600">
+      Aucun article disponible pour le moment.
+    </p>
+    }
   </div>
 </div>

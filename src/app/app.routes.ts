@@ -8,11 +8,16 @@ import { ProfileComponent } from './features/user/pages/profile/profile.componen
 import { LoginComponent } from './features/auth/pages/login/login.component';
 import { RegisterComponent } from './features/auth/pages/register/register.component';
 import { authGuard } from './core/guards/auth.guard';
+import { MyArticlesComponent } from './features/articles/pages/my-articles/my-articles.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: '', component: HomeComponent },
   {
     path: 'explore',
+    component: ExploreComponent,
+  },
+  {
+    path: 'explore/:page',
     component: ExploreComponent,
   },
   {
@@ -31,6 +36,12 @@ export const routes: Routes = [
     canActivate: [authGuard('auth')],
   },
   {
+    path: 'myarticles',
+    component: MyArticlesComponent,
+    canActivate: [authGuard('auth')],
+  },
+
+  {
     path: 'profile/:id',
     component: ProfileComponent,
     canActivate: [authGuard('auth')],
@@ -46,5 +57,10 @@ export const routes: Routes = [
     component: RegisterComponent,
     title: "CL - Page de d'inscription",
     canActivate: [authGuard('guest')],
+  },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full',
   },
 ];

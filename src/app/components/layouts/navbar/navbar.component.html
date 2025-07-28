@@ -2,10 +2,8 @@
   class="navbar bg-base-100 border-b border-base-200 shadow-sm fixed top-0 left-0 w-full z-50"
 >
   <div class="max-w-7xl mx-auto w-full px-4 flex justify-between items-center">
-    <!-- Logo -->
     <a routerLink="/" class="text-xl font-bold text-primary">ContentLoop</a>
 
-    <!-- Menu desktop -->
     <ul
       class="hidden md:flex gap-6 items-center text-sm font-medium text-base-content"
     >
@@ -37,7 +35,6 @@
       }
     </ul>
 
-    <!-- Actions -->
     <div class="flex items-center gap-3">
       @if (!isAuthenticated()) {
       <a
@@ -47,6 +44,31 @@
       >
       <a routerLink="/register" class="btn btn-sm btn-primary">Inscription</a>
       } @else {
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-sm btn-ghost">
+          {{ `${user()?.firstName } ${user()?.lastName}`}}
+          <svg
+            class="w-4 h-4 ml-1"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+        <ul
+          tabindex="0"
+          class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48"
+        >
+          <li><a routerLink="/myarticles">Mes articles</a></li>
+        </ul>
+      </div>
       <button (click)="onLogout()" class="btn btn-sm btn-primary">
         Se déconnnecter
       </button>

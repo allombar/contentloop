@@ -3,8 +3,7 @@
     Créer un article
   </h1>
 
-  <form class="space-y-6" (ngSubmit)="onSubmit()">
-    <!-- Titre -->
+  <form class="space-y-6" [formGroup]="articleForm" (submit)="onSubmit()">
     <div>
       <label for="title" class="label">
         <span class="label-text">Titre</span>
@@ -12,70 +11,43 @@
       <input
         type="text"
         id="title"
-        [(ngModel)]="article.title"
+        formControlName="title"
         name="title"
-        placeholder="Ex : 💡 Comment j'ai appris Angular en 30 jours"
+        placeholder="Titre de votre article"
         class="input input-bordered w-full"
         required
       />
     </div>
 
-    <!-- Image de couverture -->
     <div>
-      <label class="label">
-        <span class="label-text">Image de couverture</span>
+      <label for="description" class="label">
+        <span class="label-text">Description</span>
       </label>
       <input
-        type="file"
-        (change)="onImageSelected($event)"
-        accept="image/*"
-        class="file-input file-input-bordered w-full"
-      />
-      @if (article.cover) {
-      <img
-        [src]="article.cover"
-        class="mt-4 rounded-lg max-h-64 object-cover w-full"
-      />
-      }
-    </div>
-
-    <!-- Catégorie -->
-    <div>
-      <label for="category" class="label">
-        <span class="label-text">Catégorie</span>
-      </label>
-      <select
-        [(ngModel)]="article.category"
-        name="category"
-        id="category"
-        class="select select-bordered w-full"
+        type="text"
+        id="description"
+        formControlName="description"
+        name="description"
+        placeholder="Description de votre article"
+        class="input input-bordered w-full"
         required
-      >
-        <option disabled value="">Choisir une catégorie</option>
-        @for (cat of categories; track $index) {
-        <option [value]="cat">{{ cat }}</option>
-        }
-      </select>
+      />
     </div>
 
-    <!-- Contenu avec émojis -->
-    <div>
-      <label class="label">
-        <span class="label-text">Contenu</span>
-      </label>
-      <textarea
-        [(ngModel)]="article.content"
-        name="content"
-        placeholder="✍️ Écris ton article ici... Tu peux utiliser des émojis, du texte enrichi, etc."
-        rows="10"
-        class="textarea textarea-bordered w-full"
-        required
-      ></textarea>
-    </div>
+    <quill-editor
+      formControlName="content"
+      name="content"
+      [modules]="modules"
+      placeholder="Écrivez votre article..."
+      theme="snow"
+      format="html"
+    >
+    </quill-editor>
 
-    <!-- Soumettre -->
     <div class="text-center">
-      <button type="submit" class="btn btn-primary">Publier l'article</button>
+      <button type="submit" [disabled]="isSending" class="btn btn-primary">
+        Publier l'article
+      </button>
     </div>
   </form>
 </div>
